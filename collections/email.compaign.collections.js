@@ -24,6 +24,18 @@
     }
   };
 
+const getSpecificCompaign=async(req,res)=>{
+  try {
+    const compaign = await Compaign.findById(req.params.id)
+  if(!compaign) return res.status(404).json({message : "Not found"})
+
+    res.status(200).json(compaign)
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+
   const updateCompaign = async (req, res) => {
     try {
       const compaign = await Compaign.findById(req.params.id);
@@ -65,7 +77,7 @@
       if (!compaign)
         return res.status(404).json({ message: "Compaign not found" });
       const generateTrackingId = () => {
-        return Math.random().toString(36).substr(2, 9);  // Simple function to generate unique tracking IDs
+        return Math.random().toString(36).substr(2, 9);
       };
       const { subject, emailContent, recipients } = compaign;
 
@@ -78,7 +90,7 @@
          ${recipients.map((recipient) => {
           const trackingId = generateTrackingId();
       const trackingPixelUrl = `http://localhost:3000/track/open/${trackingId}`;
-      const link = `http://localhost:3000/track/click/${trackingId}?redirectUrl=${encodeURIComponent("https://pokemon-fullstackdb.vercel.app/")}`;
+      const link = `http://localhost:3000/track/click/${trackingId}?redirectUrl=${"http://localhost:5173/"}&_=${new Date().getTime()}`;
       return `
       <a href="${link}">Click Here</a><br />
       <img src="${trackingPixelUrl}" width="1" height="1" style="display:none;" />
@@ -104,7 +116,7 @@
 
 
       compaign.totalEmailsSent = recipients.length;
-      console.log(compaign.totalEmailsSent)
+   
       await compaign.save()
       console.log("All emails sent successfully", results);
       return results;
@@ -204,5 +216,6 @@
     sendBulkEmails,
     scheduleCampaign,
     openTracking,
-    clickrateTracking
+    clickrateTracking,
+    getSpecificCompaign
   };

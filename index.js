@@ -3,14 +3,14 @@ require('dotenv').config()
 const app = express()
 const PORT = process.env.PORT
 const MongoConnect = require("./Config/db")
-const UserRouter = require("./Router/login.router")
+const UserRouter = require("./Router/auth.router")
 const CompaignRouter = require("./Router/email.compaign.router")
 app.use(express.json())
 const cors = require('cors');
 
 app.use(cors());
 app.use("/api",CompaignRouter)
-app.use("/login",UserRouter)
+app.use("/api",UserRouter)
 app.get("/health",(req,res)=>{
     res.send("OK")
 })

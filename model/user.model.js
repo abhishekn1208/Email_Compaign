@@ -10,7 +10,11 @@ const UserSchema = new mongoose.Schema({
         unique : true,
         required : true
     },
-    isAdmin: { type: Boolean, default: false }
+    role :{
+        type : String,
+        enum : ['admin', 'user'],
+        default : 'user'
+    }
 })
 
 const User = mongoose.model("User",UserSchema)

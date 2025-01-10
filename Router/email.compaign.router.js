@@ -1,21 +1,24 @@
 const express = require("express")
 const routes = express.Router()
-const {createCompaign,getallCompaigns,updateCompaign,deleteCompaign,sendBulkEmails,scheduleCampaign,clickrateTracking,openTracking} = require("../collections/email.compaign.collections")
+const {createCompaign,getallCompaigns,updateCompaign,deleteCompaign,getSpecificCompaign,scheduleCampaign,clickrateTracking,openTracking} = require("../collections/email.compaign.collections")
+const CanAccess = require("../middleware/CanAccess")
+const auth = require("../middleware/auth")
 
 //create compaign
-routes.post("/create",createCompaign)
+routes.post("/create",auth,CanAccess("admin"),createCompaign)
 
 //getall compaign
 routes.get("/",getallCompaigns)
 
+//get Specific compaign
+routes.get("/:id", getSpecificCompaign)
+
 //update compaign
-routes.patch("/:id",updateCompaign)
+routes.patch("/:id",auth,CanAccess("admin"),updateCompaign)
 
 //delete a compaign
-routes.delete("/:id", deleteCompaign)
+routes.delete("/:id",auth,CanAccess("admin"), deleteCompaign)
 
-//send bulk email
-routes.get("/sendemail/:id", sendBulkEmails)
 
 //send bulk email at scheduled timer
 routes.post("/sendemail/:id/schedule",scheduleCampaign)

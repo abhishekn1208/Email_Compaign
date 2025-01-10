@@ -1,9 +1,9 @@
 const express = require("express")
 const routes = express.Router()
-const {loginAdmin} = require("../collections/login.collection")
-const auth = require("../middleware/auth")
+const {loginAdmin, registerUser} = require("../collections/auth.collection")
 
 
+routes.post("/register", registerUser)
 routes.post("/login",loginAdmin)
 
 module.exports = routes
